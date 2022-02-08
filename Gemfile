@@ -8,5 +8,9 @@ group :development do
   gem "sqlite3"
 end
 
+group :development, :test do
+  gem "standard", "~> 1.7"
+end
+
 # Start debugger with binding.b -- Read more: https://github.com/ruby/debug
 # gem "debug", ">= 1.0.0", group: %i[ development test ]
