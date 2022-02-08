@@ -1,0 +1,4 @@
+ignore:
+  - test/dummy/config/environments/production.rb
+  - test/dummy/config/puma
+  - test/dummy/config/puma.rb

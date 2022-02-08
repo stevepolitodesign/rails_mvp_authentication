@@ -5,7 +5,12 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 gemspec
 
 group :development do
+  gem "sprockets-rails", "~> 3.4", ">= 3.4.2"
   gem "sqlite3"
+end
+
+group :development, :test do
+  gem "standard", "~> 1.7"
 end
 
 # Start debugger with binding.b -- Read more: https://github.com/ruby/debug
