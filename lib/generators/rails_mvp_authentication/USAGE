@@ -1,0 +1,5 @@
+Description:
+    Rails authentication via a generator.
+
+Example:
+    bin/rails generate rails_mvp_authentication:install
