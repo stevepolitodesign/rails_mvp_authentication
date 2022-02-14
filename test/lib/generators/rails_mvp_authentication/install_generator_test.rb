@@ -5,10 +5,15 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
   tests ::RailsMvpAuthentication::Generators::InstallGenerator
   destination Rails.root
 
+  setup do
+    backup_routes
+  end
+
   teardown do
     remove_if_exists("db/migrate")
     remove_if_exists("app/models/user.rb")
     remove_if_exists("Gemfile")
+    restore_routes
   end
 
   test "creates migration for users table" do
@@ -47,8 +52,37 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     assert_file "Gemfile", /gem "bcrypt", "~> 3.1.7"/
   end
 
+  test "should add routes" do
+    run_generator
+
+    assert_file "config/routes.rb" do |file|
+      assert_match(/post "sign_up", to: "users#create"/, file)
+      assert_match(/get "sign_up", to: "users#new"/, file)
+      assert_match(/put "account", to: "users#update"/, file)
+      assert_match(/get "account", to: "users#edit"/, file)
+      assert_match(/delete "account", to: "users#destroy"/, file)
+      assert_match(/resources :confirmations, only: \[:create, :edit, :new\], param: :confirmation_token/, file)
+      assert_match(/post "login", to: "sessions#create"/, file)
+      assert_match(/delete "logout", to: "sessions#destroy"/, file)
+      assert_match(/get "login", to: "sessions#new"/, file)
+      assert_match(/resources :passwords, only: \[:create, :edit, :new, :update\], param: :password_reset_token/, file)
+      assert_match(/resources :active_sessions, only: \[:destroy\] do/, file)
+      assert_match(/delete "destroy_all"/, file)
+    end
+  end
+
+  def backup_routes
+    copy_file Rails.root.join("config/routes.rb"), Rails.root.join("config/routes.rb.bak")
+  end
+
   def remove_if_exists(path)
     full_path = Rails.root.join(path)
     FileUtils.rm_rf(full_path)
+  end
+
+  def restore_routes
+    File.delete(Rails.root.join("config/routes.rb"))
+    copy_file Rails.root.join("config/routes.rb.bak"), Rails.root.join("config/routes.rb")
+    File.delete(Rails.root.join("config/routes.rb.bak"))
   end
 end

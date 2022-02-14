@@ -1,4 +1,7 @@
-== Setup complete! 🎉  ==
+========== Setup complete! 🎉  ==========
 
-👉 1. Run bundle install
-👉 2. Run rails db:migrate
+Next steps 👇
+
+🏗  Run bundle install
+💿  Run rails db:migrate
+🔗  Add a root path in config/routes.rb
