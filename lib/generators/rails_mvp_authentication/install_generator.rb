@@ -10,6 +10,7 @@ module RailsMvpAuthentication
         modify_users_table
         create_user_model
         add_bcrypt
+        add_routes
         print_instructions
       end
 
@@ -23,6 +24,26 @@ module RailsMvpAuthentication
         else
           gem "bcrypt", "~> 3.1.7"
         end
+      end
+
+      def add_routes
+        route %(
+          post "sign_up", to: "users#create"
+          get "sign_up", to: "users#new"
+          put "account", to: "users#update"
+          get "account", to: "users#edit"
+          delete "account", to: "users#destroy"
+          resources :confirmations, only: [:create, :edit, :new], param: :confirmation_token
+          post "login", to: "sessions#create"
+          delete "logout", to: "sessions#destroy"
+          get "login", to: "sessions#new"
+          resources :passwords, only: [:create, :edit, :new, :update], param: :password_reset_token
+          resources :active_sessions, only: [:destroy] do
+            collection do
+              delete "destroy_all"
+            end
+          end
+        )
       end
 
       def bcrypt_is_commented_out
