@@ -13,7 +13,9 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     remove_if_exists("db/migrate")
     remove_if_exists("app/models/current.rb")
     remove_if_exists("app/models/user.rb")
+    remove_if_exists("app/controllers/confirmations_controller.rb")
     remove_if_exists("app/controllers/users_controller.rb")
+    remove_if_exists("app/views/confirmations")
     remove_if_exists("app/views/users")
     remove_if_exists("Gemfile")
     restore_routes
@@ -91,6 +93,18 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
 
     assert_file "app/views/users/edit.html.erb"
     assert_file "app/views/users/new.html.erb"
+  end
+
+  test "should create confirmations controller" do
+    run_generator
+
+    assert_file "app/controllers/confirmations_controller.rb"
+  end
+
+  test "should create confirmation views" do
+    run_generator
+
+    assert_file "app/views/confirmations/new.html.erb"
   end
 
   def backup_routes

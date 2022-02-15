@@ -14,6 +14,8 @@ module RailsMvpAuthentication
         create_current_model
         create_users_controller
         create_user_views
+        create_confirmations_controller
+        create_confirmation_views
         print_instructions
       end
 
@@ -57,6 +59,14 @@ module RailsMvpAuthentication
         end
 
         false
+      end
+
+      def create_confirmations_controller
+        template "confirmations_controller.rb", "app/controllers/confirmations_controller.rb"
+      end
+
+      def create_confirmation_views
+        template "views/confirmations/new.html.erb", "app/views/confirmations/new.html.erb"
       end
 
       def create_current_model
