@@ -11,6 +11,7 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
 
   teardown do
     remove_if_exists("db/migrate")
+    remove_if_exists("app/models/current.rb")
     remove_if_exists("app/models/user.rb")
     remove_if_exists("Gemfile")
     restore_routes
@@ -69,6 +70,12 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
       assert_match(/resources :active_sessions, only: \[:destroy\] do/, file)
       assert_match(/delete "destroy_all"/, file)
     end
+  end
+
+  test "should add current model" do
+    run_generator
+
+    assert_file "app/models/current.rb"
   end
 
   def backup_routes

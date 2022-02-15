@@ -11,6 +11,7 @@ module RailsMvpAuthentication
         create_user_model
         add_bcrypt
         add_routes
+        create_current_model
         print_instructions
       end
 
@@ -54,6 +55,10 @@ module RailsMvpAuthentication
         end
 
         false
+      end
+
+      def create_current_model
+        template "current.rb", "app/models/current.rb"
       end
 
       def create_user_model
