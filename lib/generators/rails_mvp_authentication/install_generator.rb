@@ -16,6 +16,8 @@ module RailsMvpAuthentication
         create_user_views
         create_confirmations_controller
         create_confirmation_views
+        ceate_user_mailer
+        ceate_user_mailer_views
         print_instructions
       end
 
@@ -75,6 +77,17 @@ module RailsMvpAuthentication
 
       def create_users_controller
         template "users_controller.rb", "app/controllers/users_controller.rb"
+      end
+
+      def ceate_user_mailer
+        template "user_mailer.rb", "app/mailers/user_mailer.rb"
+      end
+
+      def ceate_user_mailer_views
+        template "views/user_mailer/confirmation.html.erb", "app/views/user_mailer/confirmation.html.erb"
+        template "views/user_mailer/confirmation.text.erb", "app/views/user_mailer/confirmation.text.erb"
+        template "views/user_mailer/password_reset.html.erb", "app/views/user_mailer/password_reset.html.erb"
+        template "views/user_mailer/password_reset.text.erb", "app/views/user_mailer/password_reset.text.erb"
       end
 
       def create_user_model
