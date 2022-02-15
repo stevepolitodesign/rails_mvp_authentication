@@ -17,6 +17,8 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     remove_if_exists("app/controllers/users_controller.rb")
     remove_if_exists("app/views/confirmations")
     remove_if_exists("app/views/users")
+    remove_if_exists("app/mailers/user_mailer.rb")
+    remove_if_exists("app/views/user_mailer")
     remove_if_exists("Gemfile")
     restore_routes
   end
@@ -105,6 +107,21 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     run_generator
 
     assert_file "app/views/confirmations/new.html.erb"
+  end
+
+  test "should create user mailer" do
+    run_generator
+
+    assert_file "app/mailers/user_mailer.rb"
+  end
+
+  test "should create user mailer views" do
+    run_generator
+
+    assert_file "app/views/user_mailer/confirmation.html.erb"
+    assert_file "app/views/user_mailer/confirmation.text.erb"
+    assert_file "app/views/user_mailer/password_reset.html.erb"
+    assert_file "app/views/user_mailer/confirmation.text.erb"
   end
 
   def backup_routes

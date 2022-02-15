@@ -1,0 +1,3 @@
+Confirmation Instructions
+
+<%%= edit_confirmation_url(@confirmation_token) %>
