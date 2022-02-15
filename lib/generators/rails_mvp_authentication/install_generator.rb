@@ -12,6 +12,8 @@ module RailsMvpAuthentication
         add_bcrypt
         add_routes
         create_current_model
+        create_users_controller
+        create_user_views
         print_instructions
       end
 
@@ -61,12 +63,21 @@ module RailsMvpAuthentication
         template "current.rb", "app/models/current.rb"
       end
 
+      def create_users_controller
+        template "users_controller.rb", "app/controllers/users_controller.rb"
+      end
+
       def create_user_model
         template "user.rb", "app/models/user.rb"
       end
 
       def create_users_table
         generate "migration", "create_users_table email:string:index confirmed_at:datetime password_digest:string unconfirmed_email:string"
+      end
+
+      def create_user_views
+        template "views/users/edit.html.erb", "app/views/users/edit.html.erb"
+        template "views/users/new.html.erb", "app/views/users/new.html.erb"
       end
 
       def gemfile
