@@ -5,28 +5,8 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
   tests ::RailsMvpAuthentication::Generators::InstallGenerator
   destination Rails.root
 
-  setup do
-    backup_routes
-    backup_config
-    backup_file("app/controllers/application_controller.rb")
-  end
-
-  teardown do
-    remove_if_exists("db/migrate")
-    remove_if_exists("app/models/current.rb")
-    remove_if_exists("app/models/user.rb")
-    remove_if_exists("app/controllers/confirmations_controller.rb")
-    remove_if_exists("app/controllers/users_controller.rb")
-    remove_if_exists("app/views/confirmations")
-    remove_if_exists("app/views/users")
-    remove_if_exists("app/mailers/user_mailer.rb")
-    remove_if_exists("app/views/user_mailer")
-    remove_if_exists("Gemfile")
-    remove_if_exists("app/controllers/concerns/authentication.rb")
-    restore_routes
-    restore_config
-    restore_file("app/controllers/application_controller.rb")
-  end
+  setup :prepare_destination
+  teardown :restore_destination
 
   test "creates migration for users table" do
     run_generator
@@ -155,13 +135,11 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     copy_file Rails.root.join(path), Rails.root.join("#{path}.bak")
   end
 
-  def backup_config
-    copy_file Rails.root.join("config/environments/test.rb"), Rails.root.join("config/environments/test.rb.bak")
-    copy_file Rails.root.join("config/environments/development.rb"), Rails.root.join("config/environments/development.rb.bak")
-  end
-
-  def backup_routes
-    copy_file Rails.root.join("config/routes.rb"), Rails.root.join("config/routes.rb.bak")
+  def prepare_destination
+    backup_file("config/routes.rb")
+    backup_file("config/environments/test.rb")
+    backup_file("config/environments/development.rb")
+    backup_file("app/controllers/application_controller.rb")
   end
 
   def remove_if_exists(path)
@@ -169,20 +147,22 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     FileUtils.rm_rf(full_path)
   end
 
-  def restore_config
-    File.delete(Rails.root.join("config/environments/test.rb"))
-    copy_file Rails.root.join("config/environments/test.rb.bak"), Rails.root.join("config/environments/test.rb")
-    File.delete(Rails.root.join("config/environments/test.rb.bak"))
-
-    File.delete(Rails.root.join("config/environments/development.rb"))
-    copy_file Rails.root.join("config/environments/development.rb.bak"), Rails.root.join("config/environments/development.rb")
-    File.delete(Rails.root.join("config/environments/development.rb.bak"))
-  end
-
-  def restore_routes
-    File.delete(Rails.root.join("config/routes.rb"))
-    copy_file Rails.root.join("config/routes.rb.bak"), Rails.root.join("config/routes.rb")
-    File.delete(Rails.root.join("config/routes.rb.bak"))
+  def restore_destination
+    remove_if_exists("db/migrate")
+    remove_if_exists("app/models/current.rb")
+    remove_if_exists("app/models/user.rb")
+    remove_if_exists("app/controllers/confirmations_controller.rb")
+    remove_if_exists("app/controllers/users_controller.rb")
+    remove_if_exists("app/views/confirmations")
+    remove_if_exists("app/views/users")
+    remove_if_exists("app/mailers/user_mailer.rb")
+    remove_if_exists("app/views/user_mailer")
+    remove_if_exists("Gemfile")
+    remove_if_exists("app/controllers/concerns/authentication.rb")
+    restore_file("config/routes.rb")
+    restore_file("config/environments/test.rb")
+    restore_file("config/environments/development.rb")
+    restore_file("app/controllers/application_controller.rb")
   end
 
   def restore_file(path)
