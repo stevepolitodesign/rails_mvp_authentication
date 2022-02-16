@@ -21,6 +21,8 @@ module RailsMvpAuthentication
         configure_hosts
         create_authentication_concern
         modify_application_controller
+        create_sessions_controller
+        create_session_views
         print_instructions
       end
 
@@ -89,6 +91,14 @@ module RailsMvpAuthentication
 
       def create_current_model
         template "current.rb", "app/models/current.rb"
+      end
+
+      def create_sessions_controller
+        template "sessions_controller.rb", "app/controllers/sessions_controller.rb"
+      end
+
+      def create_session_views
+        template "views/sessions/new.html.erb", "app/views/sessions/new.html.erb"
       end
 
       def create_users_controller

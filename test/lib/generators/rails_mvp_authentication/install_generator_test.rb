@@ -129,6 +129,18 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     end
   end
 
+  test "should create sessions controller" do
+    run_generator
+
+    assert_file "app/controllers/sessions_controller.rb"
+  end
+
+  test "should create session views" do
+    run_generator
+
+    assert_file "app/views/sessions/new.html.erb"
+  end
+
   private
 
   def backup_file(path)
@@ -159,6 +171,8 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     remove_if_exists("app/views/user_mailer")
     remove_if_exists("Gemfile")
     remove_if_exists("app/controllers/concerns/authentication.rb")
+    remove_if_exists("app/controllers/sessions_controller.rb")
+    remove_if_exists("app/views/sessions/new.html.erb")
     restore_file("config/routes.rb")
     restore_file("config/environments/test.rb")
     restore_file("config/environments/development.rb")
