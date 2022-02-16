@@ -8,6 +8,7 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
   setup do
     backup_routes
     backup_config
+    backup_file("app/controllers/application_controller.rb")
   end
 
   teardown do
@@ -21,8 +22,10 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     remove_if_exists("app/mailers/user_mailer.rb")
     remove_if_exists("app/views/user_mailer")
     remove_if_exists("Gemfile")
+    remove_if_exists("app/controllers/concerns/authentication.rb")
     restore_routes
     restore_config
+    restore_file("app/controllers/application_controller.rb")
   end
 
   test "creates migration for users table" do
@@ -137,7 +140,20 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     end
   end
 
+  test "should create authentication concern" do
+    run_generator
+
+    assert_file "app/controllers/concerns/authentication.rb"
+    assert_file "app/controllers/application_controller.rb" do |file|
+      assert_match(/include Authentication/, file)
+    end
+  end
+
   private
+
+  def backup_file(path)
+    copy_file Rails.root.join(path), Rails.root.join("#{path}.bak")
+  end
 
   def backup_config
     copy_file Rails.root.join("config/environments/test.rb"), Rails.root.join("config/environments/test.rb.bak")
@@ -167,5 +183,11 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     File.delete(Rails.root.join("config/routes.rb"))
     copy_file Rails.root.join("config/routes.rb.bak"), Rails.root.join("config/routes.rb")
     File.delete(Rails.root.join("config/routes.rb.bak"))
+  end
+
+  def restore_file(path)
+    File.delete(Rails.root.join(path))
+    copy_file Rails.root.join("#{path}.bak"), Rails.root.join(path)
+    File.delete(Rails.root.join("#{path}.bak"))
   end
 end
