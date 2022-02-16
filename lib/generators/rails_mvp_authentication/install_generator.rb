@@ -18,6 +18,7 @@ module RailsMvpAuthentication
         create_confirmation_views
         ceate_user_mailer
         ceate_user_mailer_views
+        configure_hosts
         print_instructions
       end
 
@@ -61,6 +62,15 @@ module RailsMvpAuthentication
         end
 
         false
+      end
+
+      def configure_hosts
+        application(nil, env: "test") do
+          'config.action_mailer.default_url_options = {host: "example.com"}'
+        end
+        application(nil, env: "development") do
+          'config.action_mailer.default_url_options = {host: "localhost", port: 3000}'
+        end
       end
 
       def create_confirmations_controller

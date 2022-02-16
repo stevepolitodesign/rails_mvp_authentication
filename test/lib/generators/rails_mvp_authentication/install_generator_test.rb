@@ -7,6 +7,7 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
 
   setup do
     backup_routes
+    backup_config
   end
 
   teardown do
@@ -21,6 +22,7 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     remove_if_exists("app/views/user_mailer")
     remove_if_exists("Gemfile")
     restore_routes
+    restore_config
   end
 
   test "creates migration for users table" do
@@ -124,6 +126,24 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     assert_file "app/views/user_mailer/confirmation.text.erb"
   end
 
+  test "should configure hosts" do
+    run_generator
+
+    assert_file "config/environments/test.rb" do |file|
+      assert_match(/config.action_mailer.default_url_options = {host: "example.com"}/, file)
+    end
+    assert_file "config/environments/development.rb" do |file|
+      assert_match(/config.action_mailer.default_url_options = {host: "localhost", port: 3000}/, file)
+    end
+  end
+
+  private
+
+  def backup_config
+    copy_file Rails.root.join("config/environments/test.rb"), Rails.root.join("config/environments/test.rb.bak")
+    copy_file Rails.root.join("config/environments/development.rb"), Rails.root.join("config/environments/development.rb.bak")
+  end
+
   def backup_routes
     copy_file Rails.root.join("config/routes.rb"), Rails.root.join("config/routes.rb.bak")
   end
@@ -131,6 +151,16 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
   def remove_if_exists(path)
     full_path = Rails.root.join(path)
     FileUtils.rm_rf(full_path)
+  end
+
+  def restore_config
+    File.delete(Rails.root.join("config/environments/test.rb"))
+    copy_file Rails.root.join("config/environments/test.rb.bak"), Rails.root.join("config/environments/test.rb")
+    File.delete(Rails.root.join("config/environments/test.rb.bak"))
+
+    File.delete(Rails.root.join("config/environments/development.rb"))
+    copy_file Rails.root.join("config/environments/development.rb.bak"), Rails.root.join("config/environments/development.rb")
+    File.delete(Rails.root.join("config/environments/development.rb.bak"))
   end
 
   def restore_routes
