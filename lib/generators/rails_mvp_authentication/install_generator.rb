@@ -19,6 +19,8 @@ module RailsMvpAuthentication
         ceate_user_mailer
         ceate_user_mailer_views
         configure_hosts
+        create_authentication_concern
+        modify_application_controller
         print_instructions
       end
 
@@ -73,6 +75,10 @@ module RailsMvpAuthentication
         end
       end
 
+      def create_authentication_concern
+        template "authentication.rb", "app/controllers/concerns/authentication.rb"
+      end
+
       def create_confirmations_controller
         template "confirmations_controller.rb", "app/controllers/confirmations_controller.rb"
       end
@@ -119,6 +125,10 @@ module RailsMvpAuthentication
 
       def gemfile_exists
         File.exist?(gemfile)
+      end
+
+      def modify_application_controller
+        inject_into_file "app/controllers/application_controller.rb", "\tinclude Authentication\n", after: "class ApplicationController < ActionController::Base\n"
       end
 
       def modify_users_table
