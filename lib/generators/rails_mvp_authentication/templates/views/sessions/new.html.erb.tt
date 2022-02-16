@@ -1,0 +1,15 @@
+<%%= form_with url: login_path, scope: :user do |form| %>
+  <div>
+    <%%= form.label :email %>
+    <%%= form.email_field :email, required: true %>
+  </div>
+  <div>
+    <%%= form.label :password %>
+    <%%= form.password_field :password, required: true %>
+  </div>
+  <div>
+    <%%= form.label :remember_me %>
+    <%%= form.check_box :remember_me %>
+  </div>
+  <%%= form.submit "Sign In" %>
+<%% end %>
