@@ -10,6 +10,7 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
 
   test "creates migration for users table" do
     run_generator
+
     assert_migration "db/migrate/create_users_table.rb" do |migration|
       assert_match(/add_index :users_tables, :email, unique: true/, migration)
       assert_match(/t.string :email, null: false/, migration)
@@ -19,6 +20,7 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
 
   test "creates user model" do
     run_generator
+
     assert_file "app/models/user.rb"
   end
 
@@ -32,6 +34,7 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     FileUtils.touch Rails.root.join("Gemfile")
 
     run_generator
+
     assert_file "Gemfile", /gem "bcrypt", "~> 3.1.7"/
   end
 
@@ -41,6 +44,7 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     end
 
     run_generator
+
     assert_file "Gemfile", /gem "bcrypt", "~> 3.1.7"/
   end
 
@@ -154,6 +158,68 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     assert_file "app/views/passwords/edit.html.erb"
   end
 
+  test "should create tests if using default test suite" do
+    FileUtils.mkdir_p(Rails.root.join("test"))
+
+    run_generator
+
+    assert_file "test/controllers/active_sessions_controller_test.rb"
+    assert_file "test/controllers/confirmations_controller_test.rb"
+    assert_file "test/controllers/passwords_controller_test.rb"
+    assert_file "test/controllers/sessions_controller_test.rb"
+    assert_file "test/controllers/users_controller_test.rb"
+    assert_file "test/integration/friendly_redirects_test.rb"
+    assert_file "test/integration/user_interface_test.rb"
+    assert_file "test/mailers/previews/user_mailer_preview.rb"
+    assert_file "test/mailers/user_mailer_test.rb"
+    assert_file "test/models/active_session_test.rb"
+    assert_file "test/models/user_test.rb"
+    assert_file "test/system/logins_test.rb"
+  end
+
+  test "should modify test helper if using default test suite" do
+    FileUtils.mkdir_p(Rails.root.join("test"))
+    FileUtils.touch Rails.root.join("test/test_helper.rb")
+    File.atomic_write(Rails.root.join("test/test_helper.rb")) do |file|
+      file.write("class ActiveSupport::TestCase\nend")
+    end
+
+    run_generator
+
+    assert_file "test/test_helper.rb" do |file|
+      assert_match(/current_user/, file)
+      assert_match(/login/, file)
+      assert_match(/logout/, file)
+    end
+  end
+
+  test "should not create tests if not using default test suite" do
+    remove_if_exists("test")
+
+    run_generator
+
+    assert_no_file "test/controllers/active_sessions_controller_test.rb"
+    assert_no_file "test/controllers/confirmations_controller_test.rb"
+    assert_no_file "test/controllers/passwords_controller_test.rb"
+    assert_no_file "test/controllers/sessions_controller_test.rb"
+    assert_no_file "test/controllers/users_controller_test.rb"
+    assert_no_file "test/integration/friendly_redirects_test.rb"
+    assert_no_file "test/integration/user_interface_test.rb"
+    assert_no_file "test/mailers/previews/user_mailer_preview.rb"
+    assert_no_file "test/mailers/user_mailer_test.rb"
+    assert_no_file "test/models/active_session_test.rb"
+    assert_no_file "test/models/user_test.rb"
+    assert_no_file "test/system/logins_test.rb"
+  end
+
+  test "should not modify test helper if not using default test suite" do
+    remove_if_exists("test")
+
+    run_generator
+
+    assert_no_file "test/test_helper.rb"
+  end
+
   private
 
   def backup_file(path)
@@ -189,6 +255,7 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     remove_if_exists("app/controllers/passwords_controller.rb")
     remove_if_exists("app/views/passwords/new.html.erb")
     remove_if_exists("app/views/passwords/edit.html.erb")
+    remove_if_exists("test")
     restore_file("config/routes.rb")
     restore_file("config/environments/test.rb")
     restore_file("config/environments/development.rb")
