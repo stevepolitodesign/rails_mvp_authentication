@@ -25,6 +25,10 @@ module RailsMvpAuthentication
         create_session_views
         create_passwords_controller
         create_password_views
+        if using_default_test_suite
+          create_tests
+          modify_test_helper
+        end
         print_instructions
       end
 
@@ -116,6 +120,26 @@ module RailsMvpAuthentication
         template "users_controller.rb", "app/controllers/users_controller.rb"
       end
 
+      def create_tests
+        template "test/controllers/active_sessions_controller_test.rb", "test/controllers/active_sessions_controller_test.rb"
+        template "test/controllers/confirmations_controller_test.rb", "test/controllers/confirmations_controller_test.rb"
+        template "test/controllers/active_sessions_controller_test.rb", "test/controllers/active_sessions_controller_test.rb"
+        template "test/controllers/passwords_controller_test.rb", "test/controllers/passwords_controller_test.rb"
+        template "test/controllers/sessions_controller_test.rb", "test/controllers/sessions_controller_test.rb"
+        template "test/controllers/users_controller_test.rb", "test/controllers/users_controller_test.rb"
+
+        template "test/integration/friendly_redirects_test.rb", "test/integration/friendly_redirects_test.rb"
+        template "test/integration/user_interface_test.rb", "test/integration/user_interface_test.rb"
+
+        template "test/mailers/previews/user_mailer_preview.rb", "test/mailers/previews/user_mailer_preview.rb"
+        template "test/mailers/user_mailer_test.rb", "test/mailers/user_mailer_test.rb"
+
+        template "test/models/user_test.rb", "test/models/user_test.rb"
+        template "test/models/active_session_test.rb", "test/models/active_session_test.rb"
+
+        template "test/system/logins_test.rb", "test/system/logins_test.rb"
+      end
+
       def ceate_user_mailer
         template "user_mailer.rb", "app/mailers/user_mailer.rb"
       end
@@ -140,6 +164,10 @@ module RailsMvpAuthentication
         template "views/users/new.html.erb", "app/views/users/new.html.erb"
       end
 
+      def directory_exists(directory)
+        File.directory?(directory)
+      end
+
       def gemfile
         path_to("Gemfile")
       end
@@ -150,6 +178,35 @@ module RailsMvpAuthentication
 
       def modify_application_controller
         inject_into_file "app/controllers/application_controller.rb", "\tinclude Authentication\n", after: "class ApplicationController < ActionController::Base\n"
+      end
+
+      def modify_test_helper
+        inject_into_class "test/test_helper.rb", "ActiveSupport::TestCase" do
+          <<-RUBY
+  def current_user
+    if session[:current_active_session_id].present?
+      ActiveSession.find_by(id: session[:current_active_session_id])&.user
+    else
+      cookies[:remember_token].present?
+      ActiveSession.find_by(remember_token: cookies[:remember_token])&.user
+    end
+  end
+
+  def login(user, remember_user: nil)
+    post login_path, params: {
+      user: {
+        email: user.email,
+        password: user.password,
+        remember_me: remember_user == true ? 1 : 0
+      }
+    }
+  end
+
+  def logout
+    session.delete(:current_active_session_id)
+  end
+          RUBY
+        end
       end
 
       def modify_users_table
@@ -165,6 +222,10 @@ module RailsMvpAuthentication
 
       def print_instructions
         readme "README"
+      end
+
+      def using_default_test_suite
+        directory_exists(path_to("test"))
       end
     end
   end
