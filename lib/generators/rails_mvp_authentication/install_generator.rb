@@ -23,6 +23,8 @@ module RailsMvpAuthentication
         modify_application_controller
         create_sessions_controller
         create_session_views
+        create_passwords_controller
+        create_password_views
         print_instructions
       end
 
@@ -91,6 +93,15 @@ module RailsMvpAuthentication
 
       def create_current_model
         template "current.rb", "app/models/current.rb"
+      end
+
+      def create_passwords_controller
+        template "passwords_controller.rb", "app/controllers/passwords_controller.rb"
+      end
+
+      def create_password_views
+        template "views/passwords/new.html.erb", "app/views/passwords/new.html.erb"
+        template "views/passwords/edit.html.erb", "app/views/passwords/edit.html.erb"
       end
 
       def create_sessions_controller
