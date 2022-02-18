@@ -22,4 +22,4 @@ jobs:
       - name: Run Standard
         run: bundle exec standardrb
       - name: Run tests
-        run: bundle exec rails test test/rails_mvp_authentication_test.rb
+        run: bundle exec rails test test/lib/generators/rails_mvp_authentication/install_generator_test.rb:11
