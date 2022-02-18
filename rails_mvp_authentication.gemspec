@@ -19,5 +19,4 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency "rails", ">= 7.0.0"
-  spec.add_dependency "sprockets-rails", "~> 3.4", ">= 3.4.2"
 end
