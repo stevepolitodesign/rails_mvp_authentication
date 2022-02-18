@@ -11,6 +11,7 @@ end
 
 group :development, :test do
   gem "standard", "~> 1.7"
+  gem "bcrypt", "~> 3.1.7"
 end
 
 # Start debugger with binding.b -- Read more: https://github.com/ruby/debug
