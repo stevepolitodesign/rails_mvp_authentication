@@ -2,6 +2,6 @@
 
 Next steps 👇
 
-🏗  Run bundle install
-💿  Run rails db:migrate
-🔗  Add a root path in config/routes.rb
+1️⃣ Run bundle install
+2️⃣ Run rails db:migrate
+3️⃣ Add a root path in config/routes.rb
