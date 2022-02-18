@@ -11,6 +11,7 @@ module RailsMvpAuthentication
         create_user_model
         create_active_sessions_table
         modify_active_sessions_table
+        create_active_session_model
         add_bcrypt
         add_routes
         create_current_model
@@ -102,6 +103,10 @@ module RailsMvpAuthentication
         application(nil, env: "development") do
           'config.action_mailer.default_url_options = {host: "localhost", port: 3000}'
         end
+      end
+
+      def create_active_session_model
+        template "active_session.rb", "app/models/active_session.rb"
       end
 
       def create_active_sessions_table
