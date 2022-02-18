@@ -74,6 +74,7 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
     ast (2.4.2)
+    bcrypt (3.1.16)
     builder (3.2.4)
     concurrent-ruby (1.1.9)
     crass (1.0.6)
@@ -189,6 +190,7 @@ PLATFORMS
   arm64-darwin-21
 
 DEPENDENCIES
+  bcrypt (~> 3.1.7)
   rails_mvp_authentication!
   sprockets-rails (~> 3.4, >= 3.4.2)
   sqlite3
