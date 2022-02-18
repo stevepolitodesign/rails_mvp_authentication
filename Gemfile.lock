@@ -3,7 +3,6 @@ PATH
   specs:
     rails_mvp_authentication (0.1.0)
       rails (>= 7.0.0)
-      sprockets-rails (~> 3.4, >= 3.4.2)
 
 GEM
   remote: https://rubygems.org/
