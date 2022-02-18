@@ -19,6 +19,19 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     end
   end
 
+  test "creates migration for active sessions table" do
+    run_generator
+
+    assert_migration "db/migrate/create_active_sessions.rb" do |migration|
+      assert_match(/create_table :active_sessions do |t|/, migration)
+      assert_match(/t.references :user, null: false, foreign_key: true/, migration)
+      assert_match(/t.string :user_agent/, migration)
+      assert_match(/t.string :ip_address/, migration)
+      assert_match(/t.string :remember_token, null: false/, migration)
+      assert_match(/add_index :active_sessions, :remember_token, unique: true/, migration)
+    end
+  end
+
   test "creates user model" do
     run_generator
 
