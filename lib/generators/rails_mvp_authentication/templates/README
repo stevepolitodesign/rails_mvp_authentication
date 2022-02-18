@@ -2,6 +2,12 @@
 
 Next steps 👇
 
-🏗  Run bundle install
-💿  Run rails db:migrate
-🔗  Add a root path in config/routes.rb
+1️⃣  Run bundle install
+2️⃣  Run rails db:migrate
+3️⃣  Add a root path in config/routes.rb
+4️⃣  Ensure you have flash messages in app/views/layouts/application.html.erb.
+
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+
+=========================================
