@@ -17,6 +17,7 @@ module RailsMvpAuthentication
         create_current_model
         create_users_controller
         create_user_views
+        create_active_sessions_controller
         create_confirmations_controller
         create_confirmation_views
         ceate_user_mailer
@@ -103,6 +104,10 @@ module RailsMvpAuthentication
         application(nil, env: "development") do
           'config.action_mailer.default_url_options = {host: "localhost", port: 3000}'
         end
+      end
+
+      def create_active_sessions_controller
+        template "active_sessions_controller.rb", "app/controllers/active_sessions_controller.rb"
       end
 
       def create_active_session_model
