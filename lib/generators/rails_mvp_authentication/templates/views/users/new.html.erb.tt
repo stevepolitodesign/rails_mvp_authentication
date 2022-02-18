@@ -1,5 +1,11 @@
 <%%= form_with model: @user, url: sign_up_path do |form| %>
-  <%%= render partial: "shared/form_errors", locals: { object: form.object } %>
+  <%% if form.object.errors.any? %>
+    <ul>
+      <%% form.object.errors.full_messages.each do |message| %>
+        <li><%%= message %></li>
+      <%% end %>
+    </ul>
+  <%% end %>
   <div>
     <%%= form.label :email %>
     <%%= form.email_field :email, required: true %>
