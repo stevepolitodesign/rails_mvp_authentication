@@ -29,6 +29,7 @@ module RailsMvpAuthentication
           create_tests
           modify_test_helper
         end
+        add_links
         print_instructions
       end
 
@@ -41,6 +42,24 @@ module RailsMvpAuthentication
           uncomment_lines(gemfile, /gem "bcrypt", "~> 3.1.7"/)
         else
           gem "bcrypt", "~> 3.1.7"
+        end
+      end
+
+      def add_links
+        inject_into_file "app/views/layouts/application.html.erb", after: "<body>\n" do
+          <<-ERB
+    <ul>
+      <% if user_signed_in? %>
+        <li><%= link_to "My Acount", account_path %></li>
+        <li><%= button_to "Logout", logout_path, method: :delete %></li>
+      <% else %>
+        <li><%= link_to "Login", login_path %></li>
+        <li><%= link_to "Sign Up", sign_up_path %></li>
+        <li><%= link_to "Forgot my password", new_password_path %></li>
+        <li><%= link_to "Didn't receive confirmation instructions", new_confirmation_path %></li>
+      <% end %>
+    </ul>          
+          ERB
         end
       end
 

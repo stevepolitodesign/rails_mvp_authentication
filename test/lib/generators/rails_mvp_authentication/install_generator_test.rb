@@ -220,6 +220,19 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     assert_no_file "test/test_helper.rb"
   end
 
+  test "should add links" do
+    run_generator
+
+    assert_file "app/views/layouts/application.html.erb" do |file|
+      assert_match(/account_path/, file)
+      assert_match(/logout_path/, file)
+      assert_match(/login_path/, file)
+      assert_match(/sign_up_path/, file)
+      assert_match(/new_password_path/, file)
+      assert_match(/new_confirmation_path/, file)
+    end
+  end
+
   private
 
   def backup_file(path)
@@ -231,6 +244,7 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     backup_file("config/environments/test.rb")
     backup_file("config/environments/development.rb")
     backup_file("app/controllers/application_controller.rb")
+    backup_file("app/views/layouts/application.html.erb")
   end
 
   def remove_if_exists(path)
@@ -260,6 +274,7 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     restore_file("config/environments/test.rb")
     restore_file("config/environments/development.rb")
     restore_file("app/controllers/application_controller.rb")
+    restore_file("app/views/layouts/application.html.erb")
   end
 
   def restore_file(path)
