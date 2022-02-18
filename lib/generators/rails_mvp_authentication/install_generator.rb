@@ -9,6 +9,8 @@ module RailsMvpAuthentication
         create_users_table
         modify_users_table
         create_user_model
+        create_active_sessions_table
+        modify_active_sessions_table
         add_bcrypt
         add_routes
         create_current_model
@@ -102,6 +104,10 @@ module RailsMvpAuthentication
         end
       end
 
+      def create_active_sessions_table
+        generate "migration", "create_active_sessions user:references user_agent:string ip_address:string remember_token:string:index"
+      end
+
       def create_authentication_concern
         template "authentication.rb", "app/controllers/concerns/authentication.rb"
       end
@@ -193,6 +199,12 @@ module RailsMvpAuthentication
 
       def gemfile_exists
         File.exist?(gemfile)
+      end
+
+      def modify_active_sessions_table
+        migration = Dir.glob(Rails.root.join("db/migrate/*")).max_by { |f| File.mtime(f) }
+        gsub_file migration, /t.string :remember_token/, "t.string :remember_token, null: false"
+        gsub_file migration, /add_index :active_sessions, :remember_token/, "add_index :active_sessions, :remember_token, unique: true"
       end
 
       def modify_application_controller

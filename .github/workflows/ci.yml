@@ -19,9 +19,7 @@ jobs:
           ruby-version: '2.7.0'         
       - name: Install dependencies
         run: bundle install
-      - name: Create database
-        run: bundle exec rails db:test:prepare
       - name: Run Standard
         run: bundle exec standardrb
       - name: Run tests
-        run: bundle exec rails test
+        run: bundle exec rails test test/rails_mvp_authentication_test.rb
