@@ -32,10 +32,16 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     end
   end
 
-  test "creates user model" do
+  test "create user model" do
     run_generator
 
     assert_file "app/models/user.rb"
+  end
+
+  test "create active session model" do
+    run_generator
+
+    assert_file "app/models/active_session.rb"
   end
 
   test "does not error if there is no Gemfile" do
@@ -269,6 +275,7 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
   def restore_destination
     remove_if_exists("db/migrate")
     remove_if_exists("app/models/current.rb")
+    remove_if_exists("app/models/active_session.rb")
     remove_if_exists("app/models/user.rb")
     remove_if_exists("app/controllers/confirmations_controller.rb")
     remove_if_exists("app/controllers/users_controller.rb")
