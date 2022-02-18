@@ -253,6 +253,12 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     end
   end
 
+  test "should create active sessions controller" do
+    run_generator
+
+    assert_file "app/controllers/active_sessions_controller.rb"
+  end
+
   private
 
   def backup_file(path)
@@ -290,6 +296,7 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
     remove_if_exists("app/controllers/passwords_controller.rb")
     remove_if_exists("app/views/passwords/new.html.erb")
     remove_if_exists("app/views/passwords/edit.html.erb")
+    remove_if_exists("app/controllers/active_sessions_controller.rb")
     remove_if_exists("test")
     restore_file("config/routes.rb")
     restore_file("config/environments/test.rb")
