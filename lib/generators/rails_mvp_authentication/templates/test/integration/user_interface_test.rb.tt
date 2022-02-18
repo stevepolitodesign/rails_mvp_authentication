@@ -19,16 +19,12 @@ class UserInterfaceTest < ActionDispatch::IntegrationTest
     login @confirmed_user
 
     get account_path
-
-    assert_select "input[type='submit']" do
-      assert_select "[value=?]", "Log out of all other sessions"
-    end
+    
+    assert_select "button", "Log out of all other sessions"
     assert_match destroy_all_active_sessions_path, @response.body
 
     assert_select "table" do
-      assert_select "input[type='submit']" do
-        assert_select "[value=?]", "Sign Out"
-      end
+      assert_select "button", "Sign Out"
     end
     assert_match active_session_path(@confirmed_user.active_sessions.last), @response.body
   end

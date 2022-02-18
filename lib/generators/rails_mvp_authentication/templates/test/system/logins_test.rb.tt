@@ -11,6 +11,8 @@ class LoginsTest < ApplicationSystemTestCase
     fill_in "Email", with: @confirmed_user.email
     fill_in "Password", with: @confirmed_user.password
     click_on "Sign In"
+    
+    sleep 0.1
 
     assert_not_nil @confirmed_user.active_sessions.last.user_agent
     assert_not_nil @confirmed_user.active_sessions.last.ip_address
