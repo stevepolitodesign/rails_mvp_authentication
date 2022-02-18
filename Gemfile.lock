@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rails_mvp_authentication (0.1.0)
+    rails_mvp_authentication (1.0.0)
       rails (>= 7.0.0)
 
 GEM
