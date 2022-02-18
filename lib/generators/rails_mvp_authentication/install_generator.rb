@@ -175,7 +175,7 @@ module RailsMvpAuthentication
       end
 
       def create_users_table
-        generate "migration", "create_users_table email:string:index confirmed_at:datetime password_digest:string unconfirmed_email:string"
+        generate "migration", "create_users email:string:index confirmed_at:datetime password_digest:string unconfirmed_email:string"
       end
 
       def create_user_views
@@ -232,7 +232,7 @@ module RailsMvpAuthentication
         migration = Dir.glob(Rails.root.join("db/migrate/*")).max_by { |f| File.mtime(f) }
         gsub_file migration, /t.string :email/, "t.string :email, null: false"
         gsub_file migration, /t.string :password_digest/, "t.string :password_digest, null: false"
-        gsub_file migration, /add_index :users_tables, :email/, "add_index :users_tables, :email, unique: true"
+        gsub_file migration, /add_index :users, :email/, "add_index :users, :email, unique: true"
       end
 
       def path_to(path)

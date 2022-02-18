@@ -11,8 +11,9 @@ class RailsMvpAuthentication::InstallGeneratorTest < Rails::Generators::TestCase
   test "creates migration for users table" do
     run_generator
 
-    assert_migration "db/migrate/create_users_table.rb" do |migration|
-      assert_match(/add_index :users_tables, :email, unique: true/, migration)
+    assert_migration "db/migrate/create_users.rb" do |migration|
+      assert_match(/create_table :users do |t|/, migration)
+      assert_match(/add_index :users, :email, unique: true/, migration)
       assert_match(/t.string :email, null: false/, migration)
       assert_match(/t.string :password_digest, null: false/, migration)
     end
