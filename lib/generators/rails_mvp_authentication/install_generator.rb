@@ -54,7 +54,7 @@ module RailsMvpAuthentication
           <<-ERB
     <ul>
       <% if user_signed_in? %>
-        <li><%= link_to "My Acount", account_path %></li>
+        <li><%= link_to "My Account", account_path %></li>
         <li><%= button_to "Logout", logout_path, method: :delete %></li>
       <% else %>
         <li><%= link_to "Login", login_path %></li>
@@ -62,7 +62,7 @@ module RailsMvpAuthentication
         <li><%= link_to "Forgot my password", new_password_path %></li>
         <li><%= link_to "Didn't receive confirmation instructions", new_confirmation_path %></li>
       <% end %>
-    </ul>          
+    </ul>
           ERB
         end
       end
