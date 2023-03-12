@@ -44,6 +44,8 @@ module RailsMvpAuthentication
 
         if bcrypt_is_commented_out
           uncomment_lines(gemfile, /gem "bcrypt", "~> 3.1.7"/)
+        elsif !bcrypt_is_not_commented
+          gem "bcrypt", "~> 3.1.7"
         end
       end
 
@@ -90,6 +92,16 @@ module RailsMvpAuthentication
 
         File.open(gemfile).each_line do |line|
           return true if /# gem "bcrypt", "~> 3.1.7"/.match?(line)
+        end
+
+        false
+      end
+
+      def bcrypt_is_not_commented
+        gemfile = path_to("Gemfile")
+
+        File.open(gemfile).each_line do |line|
+          return true if /gem "bcrypt", "~> 3.1.7"/.match?(line)
         end
 
         false
