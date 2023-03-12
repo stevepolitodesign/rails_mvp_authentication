@@ -89,7 +89,7 @@ module RailsMvpAuthentication
         gemfile = path_to("Gemfile")
 
         File.open(gemfile).each_line do |line|
-          return true if line =~ /# gem "bcrypt", "~> 3.1.7"/
+          return true if /# gem "bcrypt", "~> 3.1.7"/.match?(line)
         end
 
         false
