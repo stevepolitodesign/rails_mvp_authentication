@@ -35,7 +35,7 @@ module Authentication
   end
 
   def remember(active_session)
-    cookies.permanent.encrypted[:remember_token] = active_session.remember_token
+    cookies.permanent.encrypted[:remember_token] = { value: active_session.remember_token, httponly: true, same_site: :strict, secure: true }
   end
 
   private
@@ -44,7 +44,7 @@ module Authentication
     Current.user = if session[:current_active_session_id].present?
       ActiveSession.find_by(id: session[:current_active_session_id])&.user
     elsif cookies.permanent.encrypted[:remember_token].present?
-      ActiveSession.find_by(remember_token: cookies.permanent.encrypted[:remember_token])&.user
+      ActiveSession.find_by(remember_token: cookies.permanent.encrypted[:remember_token].value)&.user
     end
   end
 
